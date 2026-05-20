@@ -19,5 +19,8 @@ const ctx = esbuild.context({
 if (watch) {
   ctx.then(ctx => ctx.watch());
 } else {
-  ctx.then(ctx => ctx.rebuild()).then(() => ctx.dispose());
+  ctx.then(async (c) => {
+    await c.rebuild();
+    c.dispose();
+  });
 }
