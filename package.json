@@ -1,0 +1,65 @@
+{
+  "name": "agent-bell",
+  "displayName": "Agent Bell",
+  "description": "Multi-agent 编程场景下的任务完成提醒",
+  "version": "0.1.0",
+  "publisher": "agent-bell",
+  "engines": {
+    "vscode": "^1.96.0"
+  },
+  "categories": ["Other"],
+  "activationEvents": [],
+  "main": "./dist/extension.js",
+  "contributes": {
+    "configuration": {
+      "title": "Agent Bell",
+      "properties": {
+        "agentBell.notifyThreshold": {
+          "type": "number",
+          "default": 15,
+          "description": "命令运行超过此秒数才通知（失败除外）"
+        },
+        "agentBell.ignoreCommands": {
+          "type": "array",
+          "default": ["cd", "ls", "pwd", "clear", "echo", "cat", "grep", "mkdir", "touch", "rm", "cp", "mv", "source", "export", "alias"],
+          "items": { "type": "string" },
+          "description": "忽略的命令前缀列表（仅在成功时生效）"
+        },
+        "agentBell.showStatusBar": {
+          "type": "boolean",
+          "default": true,
+          "description": "是否显示状态栏"
+        },
+        "agentBell.notifyOnFailure": {
+          "type": "boolean",
+          "default": true,
+          "description": "失败时是否总是通知（忽略阈值）"
+        }
+      }
+    },
+    "commands": [
+      {
+        "command": "agentBell.showSessions",
+        "title": "Agent Bell: 显示最近会话"
+      },
+      {
+        "command": "agentBell.clearHistory",
+        "title": "Agent Bell: 清除历史"
+      },
+      {
+        "command": "agentBell.pauseNotifications",
+        "title": "Agent Bell: 暂停通知"
+      }
+    ]
+  },
+  "scripts": {
+    "build": "node esbuild.js",
+    "watch": "node esbuild.js --watch",
+    "package": "vsce package"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.96.0",
+    "esbuild": "^0.24.0",
+    "@vscode/vsce": "^3.0.0"
+  }
+}
