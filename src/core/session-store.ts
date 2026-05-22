@@ -1,7 +1,7 @@
 import { Session, SessionEvent } from './types';
 import { EventBus } from './event-bus';
 
-const MAX_RECENT = 50;
+const MAX_RECENT = 100;
 
 export class SessionStore {
   private readonly _active = new Map<string, Session>();
@@ -25,13 +25,6 @@ export class SessionStore {
         this._recent.unshift(s);
         if (this._recent.length > MAX_RECENT) {
           this._recent.pop();
-        }
-        break;
-      }
-      case 'waiting': {
-        const existing = this._active.get(event.session.id);
-        if (existing) {
-          existing.status = 'waiting';
         }
         break;
       }

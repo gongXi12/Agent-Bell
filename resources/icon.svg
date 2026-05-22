@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#6366f1"/>
+      <stop offset="100%" style="stop-color:#8b5cf6"/>
+    </linearGradient>
+  </defs>
+  <!-- Background circle -->
+  <circle cx="64" cy="64" r="60" fill="url(#bg)"/>
+  <!-- Bell body -->
+  <path d="M64 20 C42 20 30 38 30 58 L30 72 L20 82 L108 82 L98 72 L98 58 C98 38 86 20 64 20Z" fill="white" opacity="0.95"/>
+  <!-- Bell clapper -->
+  <circle cx="64" cy="90" r="8" fill="white" opacity="0.95"/>
+  <!-- Bell top -->
+  <circle cx="64" cy="18" r="4" fill="white" opacity="0.95"/>
+  <!-- Notification dot -->
+  <circle cx="92" cy="32" r="12" fill="#ef4444"/>
+  <text x="92" y="37" text-anchor="middle" font-size="14" font-weight="bold" fill="white" font-family="Arial">!</text>
+</svg>

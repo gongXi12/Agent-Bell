@@ -6,12 +6,10 @@ const SOURCE_ICONS: Record<string, string> = {
   terminal: '$(terminal)',
   task: '$(tools)',
   debug: '$(debug-alt)',
-  agent: '$(hubot)',
 };
 
 const STATUS_LABELS: Record<string, string> = {
   running: '运行中',
-  waiting: '等待输入',
   done: '完成',
   failed: '失败',
 };
@@ -29,20 +27,18 @@ export class QuickPickUI {
       return;
     }
 
-    const items: (vscode.QuickPickItem & { session: Session })[] = all.map(s => ({
+    const items: (vscode.QuickPickItem & { session?: Session })[] = all.map(s => ({
       label: `${SOURCE_ICONS[s.source] ?? '$(question)'} ${s.name}`,
       description: s.command ?? '',
       detail: this._formatDetail(s),
       session: s,
     }));
 
-    // 底部操作
-    const clearItem: vscode.QuickPickItem & { session?: Session } = {
+    items.push({
       label: '$(trash) 清除历史',
       description: '',
       session: undefined,
-    };
-    items.push(clearItem as any);
+    });
 
     const picked = await vscode.window.showQuickPick(items, {
       placeHolder: '选择会话跳转，或清除历史',
@@ -51,10 +47,9 @@ export class QuickPickUI {
     });
 
     if (picked) {
-      if ('session' in picked && picked.session) {
+      if (picked.session) {
         this._focusSession(picked.session);
       } else {
-        // 清除历史
         this.store.clear();
         vscode.window.showInformationMessage('历史已清除');
       }
@@ -68,21 +63,16 @@ export class QuickPickUI {
 
   private _focusSession(session: Session): void {
     if (session.source === 'terminal') {
-      const terminal = session.ref as vscode.Terminal;
-      if (terminal && 'show' in terminal) {
-        terminal.show();
-      }
+      const terminal = session.terminal as vscode.Terminal;
+      if (terminal && 'show' in terminal) terminal.show();
     } else if (session.source === 'debug') {
       vscode.commands.executeCommand('workbench.debug.action.focusRepl');
     }
-    // task 暂时聚焦到终端面板
   }
 
   private _formatDuration(ms: number): string {
     const sec = Math.floor(ms / 1000);
-    if (sec < 60) {
-      return `${sec}秒`;
-    }
+    if (sec < 60) return `${sec}秒`;
     const min = Math.floor(sec / 60);
     return `${min}分${sec % 60}秒`;
   }

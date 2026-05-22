@@ -1,5 +1,5 @@
-export type SessionSource = 'terminal' | 'task' | 'debug' | 'agent';
-export type SessionStatus = 'running' | 'waiting' | 'done' | 'failed';
+export type SessionSource = 'terminal' | 'task' | 'debug';
+export type SessionStatus = 'running' | 'done' | 'failed';
 
 export interface Session {
   id: string;
@@ -12,11 +12,10 @@ export interface Session {
   duration?: number;
   exitCode?: number;
   status: SessionStatus;
-  /** 用于关联 VS Code 对象（Terminal / TaskExecution 等） */
-  ref?: unknown;
+  /** 关联的 VS Code Terminal 对象 */
+  terminal?: unknown;
 }
 
 export type SessionEvent =
   | { type: 'started'; session: Session }
-  | { type: 'ended'; session: Session }
-  | { type: 'waiting'; session: Session };
+  | { type: 'ended'; session: Session };

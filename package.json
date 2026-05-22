@@ -1,14 +1,44 @@
 {
   "name": "agent-bell",
-  "displayName": "Agent Bell",
-  "description": "Multi-agent 编程场景下的任务完成提醒",
-  "version": "0.1.0",
-  "publisher": "agent-bell",
+  "displayName": "Agent Bell — AI Agent 完成提醒",
+  "description": "当 Claude Code、Codex 等 AI Agent 完成任务时，发送系统通知提醒你回来查看",
+  "version": "1.0.0",
+  "publisher": "gongXi12",
+  "author": {
+    "name": "gongXi12"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/gongXi12/Agent-Bell"
+  },
+  "bugs": {
+    "url": "https://github.com/gongXi12/Agent-Bell/issues"
+  },
+  "homepage": "https://github.com/gongXi12/Agent-Bell#readme",
   "engines": {
     "vscode": "^1.96.0"
   },
-  "categories": ["Other"],
-  "activationEvents": ["onStartupFinished"],
+  "categories": [
+    "Other"
+  ],
+  "keywords": [
+    "ai",
+    "agent",
+    "claude",
+    "codex",
+    "notification",
+    "bell",
+    "reminder"
+  ],
+  "icon": "resources/icon.png",
+  "galleryBanner": {
+    "color": "#1e1e2e",
+    "theme": "dark"
+  },
+  "activationEvents": [
+    "onStartupFinished"
+  ],
   "main": "./dist/extension.js",
   "contributes": {
     "configuration": {
@@ -16,14 +46,29 @@
       "properties": {
         "agentBell.notifyThreshold": {
           "type": "number",
-          "default": 15,
-          "description": "命令运行超过此秒数才通知（失败除外）"
+          "default": 10,
+          "minimum": 1,
+          "description": "命令运行超过此秒数后完成时，发送系统通知"
         },
         "agentBell.ignoreCommands": {
           "type": "array",
-          "default": ["cd", "ls", "pwd", "clear", "echo", "cat", "grep", "mkdir", "touch", "rm", "cp", "mv", "source", "export", "alias"],
+          "default": [
+            "cd", "ls", "pwd", "clear", "echo", "cat", "grep",
+            "mkdir", "touch", "rm", "cp", "mv", "source", "export",
+            "alias", "dir", "cls", "type", "where", "whoami"
+          ],
           "items": { "type": "string" },
-          "description": "忽略的命令前缀列表（仅在成功时生效）"
+          "description": "忽略的命令前缀列表（仅对成功退出生效）"
+        },
+        "agentBell.enableSystemNotification": {
+          "type": "boolean",
+          "default": true,
+          "description": "是否发送操作系统级系统通知（需要系统支持）"
+        },
+        "agentBell.enableVSCodeNotification": {
+          "type": "boolean",
+          "default": true,
+          "description": "是否发送 VS Code 弹窗通知"
         },
         "agentBell.showStatusBar": {
           "type": "boolean",
@@ -33,7 +78,7 @@
         "agentBell.notifyOnFailure": {
           "type": "boolean",
           "default": true,
-          "description": "失败时是否总是通知（忽略阈值）"
+          "description": "命令失败时（非零退出码）是否总是通知"
         }
       }
     },
@@ -49,13 +94,18 @@
       {
         "command": "agentBell.pauseNotifications",
         "title": "Agent Bell: 暂停通知"
+      },
+      {
+        "command": "agentBell.testNotification",
+        "title": "Agent Bell: 测试通知"
       }
     ]
   },
   "scripts": {
     "build": "node esbuild.js",
     "watch": "node esbuild.js --watch",
-    "package": "vsce package"
+    "package": "vsce package",
+    "publish": "vsce publish"
   },
   "devDependencies": {
     "@types/vscode": "^1.96.0",
